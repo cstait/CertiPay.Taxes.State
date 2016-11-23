@@ -22,17 +22,17 @@ namespace CertiPay.Taxes.State.SouthCarolina
         {
             get
             {
-                yield return new TableRow { StartingAmount = 0, MaximumWage = 2000, TaxBase = 0, TaxRate = 0.02m };
+                yield return new TableRow { StartingAmount = 0, MaximumWage = 2920, TaxBase = 0, TaxRate = 0.00m };
 
-                yield return new TableRow { StartingAmount = 2000, MaximumWage = 4000, TaxBase = 40, TaxRate = 0.03m };
+                yield return new TableRow { StartingAmount = 2920, MaximumWage = 5840, TaxBase = 0, TaxRate = 0.03m };
 
-                yield return new TableRow { StartingAmount = 4000, MaximumWage = 6000, TaxBase = 100, TaxRate = 0.04m };
+                yield return new TableRow { StartingAmount = 5840, MaximumWage = 8760, TaxBase = 87.60m, TaxRate = 0.04m };
 
-                yield return new TableRow { StartingAmount = 6000, MaximumWage = 8000, TaxBase = 180, TaxRate = 0.05m };
+                yield return new TableRow { StartingAmount = 8760, MaximumWage = 11680, TaxBase = 204.40m, TaxRate = 0.05m };
 
-                yield return new TableRow { StartingAmount = 8000, MaximumWage = 10000, TaxBase = 280, TaxRate = 0.06m };
+                yield return new TableRow { StartingAmount = 11680, MaximumWage = 14600, TaxBase = 350.40m, TaxRate = 0.06m };
 
-                yield return new TableRow { StartingAmount = 10000, MaximumWage = Decimal.MaxValue, TaxBase = 400, TaxRate = 0.07m };
+                yield return new TableRow { StartingAmount = 14600, MaximumWage = Decimal.MaxValue, TaxBase = 525.60m, TaxRate = 0.07m };
             }
         }
     }
