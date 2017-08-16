@@ -11,28 +11,29 @@ namespace CertiPay.Taxes.State.SouthCarolina
 
         public override Decimal StandardDeduction(Decimal annualizedWages)
         {
-            // 10% up to $2,600.00 if claiming 1 or more exemptions
+            // 10% up to $2,860.00 if claiming 1 or more exemptions
 
-            return Math.Min(2600, annualizedWages * 0.10m);
+            return Math.Min(2860, annualizedWages * 0.10m);
         }
 
-        public override Decimal ExemptionValue { get { return 2300; } }
+        public override Decimal ExemptionValue { get { return 2370; } }
 
         public override IEnumerable<TableRow> Table
         {
+            //addition method
             get
             {
-                yield return new TableRow { StartingAmount = 0, MaximumWage = 2000, TaxBase = 0, TaxRate = 0.02m };
+                yield return new TableRow { StartingAmount = 0, MaximumWage = 2140, TaxBase = 0, TaxRate = 0.017m };
 
-                yield return new TableRow { StartingAmount = 2000, MaximumWage = 4000, TaxBase = 40, TaxRate = 0.03m };
+                yield return new TableRow { StartingAmount = 2140, MaximumWage = 4280, TaxBase = 36.38m, TaxRate = 0.03m };
 
-                yield return new TableRow { StartingAmount = 4000, MaximumWage = 6000, TaxBase = 100, TaxRate = 0.04m };
+                yield return new TableRow { StartingAmount = 4280, MaximumWage = 6420, TaxBase = 100.58m, TaxRate = 0.04m };
 
-                yield return new TableRow { StartingAmount = 6000, MaximumWage = 8000, TaxBase = 180, TaxRate = 0.05m };
+                yield return new TableRow { StartingAmount = 6420, MaximumWage = 8560, TaxBase = 186.18m, TaxRate = 0.05m };
 
-                yield return new TableRow { StartingAmount = 8000, MaximumWage = 10000, TaxBase = 280, TaxRate = 0.06m };
+                yield return new TableRow { StartingAmount = 8560, MaximumWage = 10700, TaxBase = 293.18m, TaxRate = 0.06m };
 
-                yield return new TableRow { StartingAmount = 10000, MaximumWage = Decimal.MaxValue, TaxBase = 400, TaxRate = 0.07m };
+                yield return new TableRow { StartingAmount = 10700, MaximumWage = Decimal.MaxValue, TaxBase = 421.58m, TaxRate = 0.07m };
             }
         }
     }

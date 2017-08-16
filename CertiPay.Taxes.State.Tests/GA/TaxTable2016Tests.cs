@@ -1,5 +1,6 @@
 ﻿using CertiPay.Payroll.Common;
 using NUnit.Framework;
+using System;
 
 namespace CertiPay.Taxes.State.Tests
 {
@@ -8,17 +9,19 @@ namespace CertiPay.Taxes.State.Tests
     [TestFixture]
     public class TaxTable2016Tests
     {
-        private Georgia.TaxTable2016 geo2016 = new Georgia.TaxTable2016();
-
         [Test]
         public void Married_SingleIncome_with_Dependents()
         {
-            var result = geo2016.Calculate(750m, PayrollFrequency.SemiMonthly, FilingStatus.MarriedWithOneIncome, 2, 1);
+            var table = TaxTables.GetForState(StateOrProvince.GA, year: 2016) as Georgia.TaxTable;
+
+            var result = table.Calculate(750m, PayrollFrequency.SemiMonthly, FilingStatus.MarriedWithOneIncome, 2, 1);
 
             Assert.AreEqual(4.08m, result);
         }
 
         [Test]
+        [TestCase(0, PayrollFrequency.Monthly, FilingStatus.Single, 1, 0, 0)]
+        [TestCase(1, PayrollFrequency.Monthly, FilingStatus.Single, 1, 0, 0)]
         [TestCase(1500, PayrollFrequency.Monthly, FilingStatus.Single, 1, 0, 49.17)]
         [TestCase(3000, PayrollFrequency.Monthly, FilingStatus.Single, 1, 0, 139.17)]
         [TestCase(1733.40, PayrollFrequency.BiWeekly, FilingStatus.Single, 1, 0, 85.16)]
@@ -39,7 +42,20 @@ namespace CertiPay.Taxes.State.Tests
         [TestCase(3000, PayrollFrequency.Monthly, FilingStatus.MarriedWithOneIncome, 2, 2, 76.33)]
         public void Checks_And_Balances(decimal grossWages, PayrollFrequency freq, FilingStatus status, int personalAllowances, int dependentAllowances, decimal expected)
         {
-            Assert.AreEqual(expected, geo2016.Calculate(grossWages, freq, status, personalAllowances, dependentAllowances));
+            var table = TaxTables.GetForState(StateOrProvince.GA, year: 2016) as Georgia.TaxTable;
+
+            var result = table.Calculate(grossWages, freq, status, personalAllowances, dependentAllowances);
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        [TestCase(-1, PayrollFrequency.Monthly, FilingStatus.Single, 1, 0)]
+        public void NegativeValues_Checks_And_Balances(decimal grossWages, PayrollFrequency freq, FilingStatus status, int personalAllowances, int dependentAllowances)
+        {
+            var table = TaxTables.GetForState(StateOrProvince.GA, year: 2016) as Georgia.TaxTable;
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => table.Calculate(grossWages, freq, status, personalAllowances, dependentAllowances));
         }
     }
 }

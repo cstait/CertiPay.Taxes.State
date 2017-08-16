@@ -15,8 +15,19 @@ namespace CertiPay.Taxes.State.SouthCarolina
 
         public abstract IEnumerable<TableRow> Table { get; }
 
+        /// <summary>
+        /// Returns South Carolina Withholding when given a non-negative value for Gross Wages and Exemptions.
+        /// </summary>
+        /// <param name="grossWages"></param>
+        /// <param name="frequency"></param>
+        /// <param name="exemptions"></param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when Negative Values entered.</exception>
+        /// <returns></returns>
         public virtual Decimal Calculate(Decimal grossWages, PayrollFrequency frequency, int exemptions = 0)
         {
+            if (grossWages < Decimal.Zero) throw new ArgumentOutOfRangeException($"{nameof(grossWages)} cannot be a negative number");
+            if (exemptions < Decimal.Zero) throw new ArgumentOutOfRangeException($"{nameof(exemptions)} cannot be a negative number");
+            
             var annualized_wages = frequency.CalculateAnnualized(grossWages);
 
             // If zero exemptions were claimed, do not deduct standard deduction
@@ -27,6 +38,9 @@ namespace CertiPay.Taxes.State.SouthCarolina
 
                 annualized_wages -= (exemptions * ExemptionValue + StandardDeduction(annualized_wages));
             }
+
+            if (annualized_wages <= 0)
+                return 0;
 
             var tax_table =
                 Table

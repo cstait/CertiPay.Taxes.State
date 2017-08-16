@@ -4,10 +4,10 @@
 #   - Minimal appveyor.yml file is an empty file. All sections are optional.
 #   - Indent each level of configuration with 2 spaces. Do not use tabs!
 #   - All section names are case-sensitive.
-#   - Section names should be unique on each level.
+#   - Section names should be unique on each level
 
 # version format
-version: 2017.0.{build}
+version: 2017.1.{build}
 
 shallow_clone: true
 
@@ -15,23 +15,16 @@ shallow_clone: true
 #       build configuration       #
 #---------------------------------#
 
-# build platform, i.e. x86, x64, Any CPU. This setting is optional.
-platform: Any CPU
-
-# build Configuration, i.e. Debug, Release, etc.
 configuration: Release
 
-before_build:
-- dotnet restore -v Minimal
-
 build_script:
-- dotnet build */**/project.json --configuration %CONFIGURATION%
+- ps: .\Build.ps1 -Configuration Release
 
 after_build:
-- dotnet pack "CertiPay.Taxes.State" --configuration %CONFIGURATION% -o artifacts
+- ps: .\Pack.ps1 -Configuration Release -Version $env:APPVEYOR_BUILD_VERSION
 
 artifacts:
-- path: artifacts\**\*.*
+- path: artifacts\**\CertiPay.Taxes.State.*.nupkg
 
 #---------------------------------#
 #       tests configuration       #
@@ -39,7 +32,7 @@ artifacts:
 
 test:
   assemblies:
-    - '**\bin\$(Configuration)\**\win7-x64\CertiPay.**.Tests.dll'
+    - '**\bin\$(Configuration)\**\CertiPay.Taxes.State.Tests.dll'
 
 #---------------------------------#
 #       artifacts configuration   #

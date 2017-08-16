@@ -11,26 +11,86 @@ namespace CertiPay.Taxes.State
     public static class TaxTables
     {
         /// <summary>
+        /// Returns a list of configured state tax entries
+        /// </summary>
+        private static IEnumerable<TaxTable> Tables
+        {
+            get
+            {
+                yield return new TaxTable2014();
+                yield return new TaxTable2015();
+                yield return new TaxTable2016();
+                yield return new TaxTable2017();
+            }
+        }
+
+        /// <summary>
         /// Find the tax table header for the given state and year
         /// </summary>
         public static TaxTableHeader GetForState(StateOrProvince state, int year)
         {
-            return
-                Values()
+            var header =
+                Tables
                 .Where(table => table.Year == year)
                 .SelectMany(table => table.Entries)
                 .Where(entry => entry.State == state)
-                .Single();
+                .SingleOrDefault();
+
+            if (header == null)
+            {
+                throw new ArgumentOutOfRangeException($"{state.DisplayName()} is not supported for year {year}");
+            }
+
+            return header;
         }
 
         /// <summary>
-        /// Returns a list of configured state tax entries
+        /// Find the tax table implementation for the given state and year
         /// </summary>
-        public static IEnumerable<TaxTable> Values()
+        public static T GetForState<T>(StateOrProvince state, int year) where T : TaxTableHeader
         {
-            yield return new TaxTable2014();
-            yield return new TaxTable2015();
-            yield return new TaxTable2016();
+            T header =
+                Tables
+                .Where(table => table.Year == year)
+                .SelectMany(table => table.Entries)
+                .Where(entry => entry.State == state)
+                .OfType<T>()
+                .SingleOrDefault();
+
+            if (header == null)
+            {
+                throw new ArgumentOutOfRangeException($"{state.DisplayName()} is not supported for year {year}");
+            }
+
+            return header;
+        }
+
+        /// <summary>
+        /// U.S. territories are islands under the jurisdiction of the United States which are not States of the United States.
+        /// Those that have their own governments and their own tax systems (Puerto Rico, U.S. Virgin Islands, Guam, American Samoa, and The Commonwealth of the Northern Mariana Islands)
+        /// and are not subject to the income taxes and withholding of U.S. federal income taxes.
+        /// </summary>
+        public static Boolean HasFederalWithholding(this StateOrProvince state)
+        {
+            switch (state)
+            {
+                // Have their own gov't and tax systems, do not fall under the Federal income taxes
+
+                case StateOrProvince.GU:
+                case StateOrProvince.PR:
+                case StateOrProvince.VI:
+                case StateOrProvince.AS:
+                case StateOrProvince.MP:
+
+                // Also include the unknown case, we won't flag them for withholding
+
+                case StateOrProvince.Unknown:
+
+                    return false;
+
+                default:
+                    return true;
+            }
         }
 
         /// <summary>
@@ -42,6 +102,16 @@ namespace CertiPay.Taxes.State
             {
                 // Also include the unknown case, we won't flag them for withholding
                 case StateOrProvince.Unknown:
+
+                // TODO These provinces have their own tax systems, and may or may not have province-specific withholding
+
+                case StateOrProvince.GU:
+                case StateOrProvince.PR:
+                case StateOrProvince.VI:
+                case StateOrProvince.AS:
+                case StateOrProvince.MP:
+
+                // States that don't have income withholding
 
                 case StateOrProvince.FL:
                 case StateOrProvince.AK:

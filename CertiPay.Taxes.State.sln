@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3B0ED9CE-71BB-4703-AE5B-719D8D52540B}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,13 +17,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{DE30F8
 		appveyor.yml = appveyor.yml
 		Build.ps1 = Build.ps1
 		LICENSE.md = LICENSE.md
+		Pack.ps1 = Pack.ps1
 		README.md = README.md
 		Test.ps1 = Test.ps1
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CertiPay.Taxes.State.Tests", "CertiPay.Taxes.State.Tests\CertiPay.Taxes.State.Tests.xproj", "{99313E4D-0C21-4751-B372-A9622D66D392}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CertiPay.Taxes.State.Tests", "CertiPay.Taxes.State.Tests\CertiPay.Taxes.State.Tests.csproj", "{99313E4D-0C21-4751-B372-A9622D66D392}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CertiPay.Taxes.State", "CertiPay.Taxes.State\CertiPay.Taxes.State.xproj", "{80BAA84D-8245-4078-8B36-E5DC1EDC5B5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CertiPay.Taxes.State", "CertiPay.Taxes.State\CertiPay.Taxes.State.csproj", "{80BAA84D-8245-4078-8B36-E5DC1EDC5B5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

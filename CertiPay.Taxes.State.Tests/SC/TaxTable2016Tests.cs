@@ -22,7 +22,9 @@ namespace CertiPay.Taxes.State.Tests.SC
         [TestCase(700, 2, PayrollFrequency.Weekly, 33.54)]
         public void Checks_And_Balances(Decimal grossWages, int exemptions, PayrollFrequency payrollFrequency, Decimal expected)
         {
-            var result = new SouthCarolina.TaxTable2016().Calculate(grossWages, payrollFrequency, exemptions);
+            var table = TaxTables.GetForState(StateOrProvince.SC, year: 2016) as SouthCarolina.TaxTable;
+
+            var result = table.Calculate(grossWages, payrollFrequency, exemptions);
 
             Assert.AreEqual(expected, result);
         }

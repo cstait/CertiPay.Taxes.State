@@ -36,10 +36,7 @@ namespace CertiPay.Taxes.State.Georgia
             }
         }
 
-        public override TaxTable.DependentAllowance DependentAllowances
-        {
-            get { return new TaxTable.DependentAllowance { Amount = 3000 }; }
-        }
+        public override Decimal DependentAllowances { get; } = 3000;
 
         public override IEnumerable<TaxableWithholding> TaxableWithholdings
         {

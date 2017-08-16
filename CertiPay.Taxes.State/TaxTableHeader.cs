@@ -1,6 +1,8 @@
 ﻿using CertiPay.Payroll.Common;
 using System;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("CertiPay.Taxes.State.Tests")]
+
 namespace CertiPay.Taxes.State
 {
     public class TaxTableHeader
@@ -26,11 +28,7 @@ namespace CertiPay.Taxes.State
         /// The decimal percentage of reduction on the FUTA credit for SUI taxes paid due to non-repaid money due
         /// to the federal government by the state
         /// </summary>
+        [Obsolete(message: "This is not determined until late into the tax year, and should not be relied upon.")]
         public virtual Decimal FUTA_Reduction_Rate { get; internal set; }
-
-        /// <summary>
-        /// Returns true if there is withholding for the state
-        /// </summary>
-        public virtual Boolean HasWithholding { get { return State.HasWithholding(); } }
     }
 }
